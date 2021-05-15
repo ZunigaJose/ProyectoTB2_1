@@ -39,9 +39,8 @@ public class Principal extends javax.swing.JFrame {
     MongoCollection<Alumno> clAlumno = null;
     public Principal() {
         initComponents();
-        ConnectionString connString = new ConnectionString(
-                "mongodb+srv://josezuniga:zxNglg9i6qp5O6Tq@proyectotb2.fdgun.mongodb.net/ProyectoTB2?retryWrites=true&w=majority"
-        );
+
+        ConnectionString connString = new ConnectionString(System.getenv("MongoURI"));
         CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
         MongoClientSettings settings = MongoClientSettings.builder()

@@ -15,8 +15,18 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.eq;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.bson.Document;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -37,9 +47,9 @@ public class Principal extends javax.swing.JFrame {
     public MongoClient mongoClient = null;
     public MongoDatabase database = null;
     MongoCollection<Alumno> clAlumno = null;
+    public Alumno alumnoIngresado = null;
     public Principal() {
         initComponents();
-
         ConnectionString connString = new ConnectionString(System.getenv("MongoURI"));
         CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
@@ -74,6 +84,10 @@ public class Principal extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         principalIngresar = new javax.swing.JButton();
         princilalRegistro = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        principalPassword = new javax.swing.JPasswordField();
+        principalLogin = new javax.swing.JTextField();
 
         jLabel2.setText("Nombre Completo:");
 
@@ -155,6 +169,11 @@ public class Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         principalIngresar.setText("Ingresar");
+        principalIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                principalIngresarActionPerformed(evt);
+            }
+        });
 
         princilalRegistro.setText("Registrarse");
         princilalRegistro.setName("principal.registro"); // NOI18N
@@ -164,21 +183,48 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Login");
+
+        jLabel5.setText("Password");
+
+        principalLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                principalLoginActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(140, Short.MAX_VALUE)
-                .addComponent(principalIngresar)
-                .addGap(72, 72, 72)
-                .addComponent(princilalRegistro)
-                .addGap(116, 116, 116))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(123, 123, 123)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5)
+                            .addComponent(principalLogin)
+                            .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(principalIngresar)
+                        .addGap(72, 72, 72)
+                        .addComponent(princilalRegistro)))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(287, Short.MAX_VALUE)
+                .addGap(79, 79, 79)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(principalLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(principalIngresar)
                     .addComponent(princilalRegistro))
@@ -205,7 +251,7 @@ public class Principal extends javax.swing.JFrame {
         try {
             clAlumno.insertOne(alumno);
         } catch (com.mongodb.MongoWriteException we) {
-            String errormsg = "";
+            String errormsg;
             if (we.getCode() == 11000) {
                 errormsg = "El Login ingresado ya existe favor ingrese uno nuevo";
             } else {
@@ -224,6 +270,33 @@ public class Principal extends javax.swing.JFrame {
         List<Alumno> prueba = clAlumno.find().into(new ArrayList<>());
         prueba.forEach(al -> System.out.println(al));
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void principalIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_principalIngresarActionPerformed
+        String pass = null;
+        try {
+            pass = getUserPassword(principalLogin.getText());
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(pantallaRegistro, "Login no encontrado. Favor vuelva a intentar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            principalLogin.setText("");
+            principalPassword.setText("");
+        } finally {
+
+            if (pass != null) {
+                if ((sha(principalPassword.getText())).equals(pass)) {
+                    //loginexitoso
+                } else {
+                    JOptionPane.showMessageDialog(pantallaRegistro, "Contraseña Incorrecta, Favor Vuelva a intentar.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    principalPassword.setText("");
+                }
+            }
+        }
+    }//GEN-LAST:event_principalIngresarActionPerformed
+
+    private void principalLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_principalLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_principalLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,16 +335,85 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JDialog pantallaRegistro;
     private javax.swing.JButton princilalRegistro;
     private javax.swing.JButton principalIngresar;
+    private javax.swing.JTextField principalLogin;
+    private javax.swing.JPasswordField principalPassword;
     private javax.swing.JTextField registroLogin;
     private javax.swing.JTextField registroNombre;
     private javax.swing.JPasswordField registroPass;
     private javax.swing.JButton registroRegistrar;
     // End of variables declaration//GEN-END:variables
+
+    byte[] generarllave() {
+        byte[] llave = new byte[96];
+        new SecureRandom().nextBytes(llave);
+        return llave;
+    }
+    
+    void guardarLlave(String file, byte[] llave) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(llave);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    void leerLlave(String file, byte[] llave) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fis.read(llave, 0, 96);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    String getUserPassword(String user) throws NullPointerException {
+        return clAlumno.find(eq("login", user)).first().getPass();
+    }
+    
+    byte[] obtenerLlave(String file) {
+        byte[] llave = new byte[96];
+        try {
+            leerLlave(file, llave);
+            System.out.println("An existing Master Key was found in file \"" + file + "\".");
+        } catch (IOException e) {
+            llave = generarllave();
+            guardarLlave(file, llave);
+        }
+        return llave;
+    }
+    
+    String sha(String pass){
+        final MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA3-256");
+            final byte[] hashbytes = digest.digest(
+                pass.getBytes(StandardCharsets.UTF_8));
+            String sha3Hex;
+            sha3Hex = bytesToHex(hashbytes);
+            return sha3Hex;
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Alumno.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 }

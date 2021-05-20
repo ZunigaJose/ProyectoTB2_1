@@ -378,18 +378,6 @@ public class Principal extends javax.swing.JFrame {
         return clAlumno.find(eq("login", user)).first().getPass();
     }
     
-    byte[] obtenerLlave(String file) {
-        byte[] llave = new byte[96];
-        try {
-            leerLlave(file, llave);
-            System.out.println("An existing Master Key was found in file \"" + file + "\".");
-        } catch (IOException e) {
-            llave = generarllave();
-            guardarLlave(file, llave);
-        }
-        return llave;
-    }
-    
     String sha(String pass){
         final MessageDigest digest;
         try {

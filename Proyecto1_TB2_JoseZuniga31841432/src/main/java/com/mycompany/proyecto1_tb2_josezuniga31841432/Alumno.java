@@ -9,10 +9,10 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 public class Alumno {
-    public ObjectId id;
-    public String nombre, login, pass;
+    private  ObjectId id;
+    private  String nombre, login, pass;
     @BsonProperty(value = "id")
-    public int alumnoId;
+    private int alumnoId;
     
 
     public Alumno(String nombre, String login, String pass, int id) {

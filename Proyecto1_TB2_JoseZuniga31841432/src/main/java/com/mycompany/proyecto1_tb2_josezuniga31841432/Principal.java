@@ -18,10 +18,12 @@ import static com.mongodb.client.model.Filters.eq;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import org.bson.Document;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -39,10 +41,12 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
-    public MongoClient mongoClient = null;
-    public MongoDatabase database = null;
+    MongoClient mongoClient = null;
+    MongoDatabase database = null;
     MongoCollection<Alumno> clAlumno = null;
-    public Alumno alumnoIngresado = null;
+    Alumno alumnoIngresado = null;
+    MongoCollection<Clase> clClase = null;
+    MongoCollection<Pregunta> clPregunta = null;
     public Principal() {
         initComponents();
         ConnectionString connString = new ConnectionString(System.getenv("MongoURI"));
@@ -56,6 +60,8 @@ public class Principal extends javax.swing.JFrame {
         mongoClient = MongoClients.create(settings);
         database = mongoClient.getDatabase("TB2Proyecto");
         clAlumno = database.getCollection("Alumno", Alumno.class);
+        clClase = database.getCollection("Clases", Clase.class);
+        clPregunta = database.getCollection("Preguntas", Pregunta.class);
     }
 
     /**
@@ -82,9 +88,11 @@ public class Principal extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        nuevaClaseNombre = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         añadirClase = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        crearClaseId = new javax.swing.JFormattedTextField();
         jPanel5 = new javax.swing.JPanel();
         cb_preguntasSelectClase = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
@@ -95,7 +103,11 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         descripcionPregunta = new javax.swing.JTextArea();
         añadirPregunta = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        creaVerdadero = new javax.swing.JRadioButton();
+        creaFalso = new javax.swing.JRadioButton();
         jPanel6 = new javax.swing.JPanel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         principalIngresar = new javax.swing.JButton();
         princilalRegistro = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -180,6 +192,12 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -188,19 +206,27 @@ public class Principal extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
+            .addGap(0, 353, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Listado de Clases", jPanel3);
 
         jLabel9.setText("Nombre de la Clase");
 
-        añadirClase.setText("jButton2");
+        añadirClase.setText("Registrar");
         añadirClase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 añadirClaseActionPerformed(evt);
             }
         });
+
+        jLabel10.setText("Id (codigo)");
+
+        try {
+            crearClaseId.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("UUU###")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -208,27 +234,31 @@ public class Principal extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(63, 63, 63)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel10)
                     .addComponent(añadirClase)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nuevaClaseNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                    .addComponent(crearClaseId))
                 .addContainerGap(356, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(85, 85, 85)
+                .addGap(33, 33, 33)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(crearClaseId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addComponent(jLabel9)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(nuevaClaseNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addComponent(añadirClase)
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Crear nuevas clases", jPanel4);
-
-        cb_preguntasSelectClase.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel6.setText("Seleccione la Clase:");
 
@@ -242,9 +272,23 @@ public class Principal extends javax.swing.JFrame {
 
         descripcionPregunta.setColumns(20);
         descripcionPregunta.setRows(5);
+        descripcionPregunta.setWrapStyleWord(true);
         jScrollPane2.setViewportView(descripcionPregunta);
 
         añadirPregunta.setText("Agregar Pregunta");
+        añadirPregunta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                añadirPreguntaActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Tipo");
+
+        buttonGroup1.add(creaVerdadero);
+        creaVerdadero.setText("Verdadero");
+
+        buttonGroup1.add(creaFalso);
+        creaFalso.setText("Falso");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -255,18 +299,23 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(54, 54, 54)
-                                .addComponent(cb_preguntasSelectClase, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(cb_preguntasSelectClase, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7))
+                        .addGap(48, 48, 48)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(creaVerdadero)
+                            .addComponent(creaFalso)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(235, 235, 235)
                         .addComponent(añadirPregunta)))
-                .addContainerGap(212, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,15 +324,22 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cb_preguntasSelectClase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(creaVerdadero)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(creaFalso)))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(añadirPregunta)
                 .addGap(42, 42, 42))
         );
@@ -298,7 +354,7 @@ public class Principal extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
+            .addGap(0, 353, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("tab4", jPanel6);
@@ -411,7 +467,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void registroRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registroRegistrarActionPerformed
         String nombre, pass, login;
-        int id = (int) clAlumno.countDocuments() + 1;
+        int id = (int) clAlumno.countDocuments();
         nombre = registroNombre.getText();
         pass = registroPass.getText();
         login = registroLogin.getText();
@@ -470,9 +526,80 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_principalLoginActionPerformed
 
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        if (jTabbedPane1.getSelectedIndex() == 2) {
+            DefaultComboBoxModel modelo = new DefaultComboBoxModel();
+            ArrayList<Clase> clases = clClase.find().into(new ArrayList<>());
+            clases.forEach(clase -> modelo.addElement(clase));
+            cb_preguntasSelectClase.setModel(modelo);
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
     private void añadirClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirClaseActionPerformed
-        // TODO add your handling code here:
+        String nombre = nuevaClaseNombre.getText();
+        String id = "";
+        if(!crearClaseId.isEditValid()) {
+            JOptionPane.showMessageDialog(pantallaRegistro, "El id(codigo) de la clase es invalido.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            crearClaseId.setText("");
+            return;
+        }
+        try {
+            crearClaseId.commitEdit();
+        } catch (ParseException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        id = crearClaseId.getValue().toString();
+        Clase clase = new Clase(id, nombre);
+        try {
+            clClase.insertOne(clase);
+        } catch (com.mongodb.MongoWriteException we) {
+            if (we.getCode() == 11000) {
+                JOptionPane.showMessageDialog(pantallaRegistro, "Ya existe una clase con ese codigo, Favor"
+                        + " vuelva a intentar", "Error", JOptionPane.ERROR_MESSAGE);
+                crearClaseId.setText("");
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(pantallaRegistro, "Ocurrio un error al crear la clase",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } finally {
+            JOptionPane.showMessageDialog(pantallaRegistro, "Clase " + nombre + " fue creada exitosamente.",
+                "Exito", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_añadirClaseActionPerformed
+
+    private void añadirPreguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirPreguntaActionPerformed
+        if (cb_preguntasSelectClase.getSelectedItem() != null) {
+            if (tituloPregunta.getText().equals("")) {
+                return;
+            }
+            if (descripcionPregunta.getText().equals("")) {
+                return;
+            }
+            if (!creaFalso.isSelected() && !creaVerdadero.isSelected()) {
+                return;
+            }
+            Clase clase = Clase.class.cast(cb_preguntasSelectClase.getSelectedItem());
+            int id = (int) clPregunta.countDocuments() + 1;
+            Pregunta preg = new Pregunta(id, clase.getIdClase(),
+                tituloPregunta.getText(), descripcionPregunta.getText(), creaVerdadero.isSelected());
+            try {
+                clPregunta.insertOne(preg);
+            } catch (com.mongodb.MongoWriteException we) {
+                JOptionPane.showMessageDialog(pantallaRegistro, "No fue posible guardar la pregunta, Favor"
+                        + " vuelva a intentar", "Error", JOptionPane.ERROR_MESSAGE);
+                crearClaseId.setText("");
+                return;
+            }
+            tituloPregunta.setText("");
+            descripcionPregunta.setText("");
+            cb_preguntasSelectClase.setSelectedItem(null);
+            buttonGroup1.clearSelection();
+        }
+    }//GEN-LAST:event_añadirPreguntaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -512,10 +639,16 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadirClase;
     private javax.swing.JButton añadirPregunta;
-    private javax.swing.JComboBox<String> cb_preguntasSelectClase;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<Clase> cb_preguntasSelectClase;
+    private javax.swing.JRadioButton creaFalso;
+    private javax.swing.JRadioButton creaVerdadero;
+    private javax.swing.JFormattedTextField crearClaseId;
     private javax.swing.JTextArea descripcionPregunta;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -533,7 +666,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField nuevaClaseNombre;
     private javax.swing.JDialog panelAdmin;
     private javax.swing.JDialog pantallaRegistro;
     private javax.swing.JButton princilalRegistro;
@@ -566,7 +699,7 @@ public class Principal extends javax.swing.JFrame {
         return "";
     }
     
-    private static String bytesToHex(byte[] hash) {
+    String bytesToHex(byte[] hash) {
         StringBuilder hexString = new StringBuilder(2 * hash.length);
         for (int i = 0; i < hash.length; i++) {
             String hex = Integer.toHexString(0xff & hash[i]);
@@ -577,4 +710,5 @@ public class Principal extends javax.swing.JFrame {
         }
         return hexString.toString();
     }
+    
 }

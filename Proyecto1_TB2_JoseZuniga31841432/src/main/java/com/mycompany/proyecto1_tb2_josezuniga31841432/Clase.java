@@ -1,27 +1,23 @@
 package com.mycompany.proyecto1_tb2_josezuniga31841432;
 
+import java.util.Arrays;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 public class Clase {
-    private int id;
+    private ObjectId id;
+    @BsonProperty(value = "id")
+    private char[] idClase = new char[6];
     private String nombreClase;
-    @BsonProperty(value = "_id")
-    private ObjectId ClaseId;
 
-    public Clase(int id, String nombreClase) {
-        this.id = id;
+    public Clase(String id, String nombreClase) {
+        this.idClase = id.toCharArray();
         this.nombreClase = nombreClase;
     }
 
-    public int getId() {
-        return id;
+    public Clase() {
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public String getNombreClase() {
         return nombreClase;
     }
@@ -30,13 +26,24 @@ public class Clase {
         this.nombreClase = nombreClase;
     }
 
-    public ObjectId getClaseId() {
-        return ClaseId;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setClaseId(ObjectId ClaseId) {
-        this.ClaseId = ClaseId;
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public String getIdClase() {
+        return new String(idClase);
+    }
+
+    public void setIdClase(String idClase) {
+        this.idClase = idClase.toCharArray();
     }
     
-    
+    @Override
+    public String toString() {
+        return new String(idClase) + ": " + nombreClase;
+    }
 }

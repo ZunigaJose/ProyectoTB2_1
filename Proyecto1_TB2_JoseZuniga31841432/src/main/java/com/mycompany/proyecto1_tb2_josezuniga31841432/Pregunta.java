@@ -4,39 +4,54 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 public class Pregunta {
-    private int id, idClase;
+    @BsonProperty(value = "id")
+    private int idPregunta;
+    private String idClase;
     private String titulo, descripcion;
     @BsonProperty(value = "_id")
-    private  ObjectId preguntaId;
+    private  ObjectId id;
+    private boolean tipo;
 
-    public ObjectId getPreguntaId() {
-        return preguntaId;
+    public Pregunta() {
     }
 
-    public void setPreguntaId(ObjectId preguntaId) {
-        this.preguntaId = preguntaId;
+    public boolean isTipo() {
+        return tipo;
     }
 
-    public Pregunta(int id, int idClase, String titulo, String descripcion) {
-        this.id = id;
-        this.idClase = idClase;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
+    public void setTipo(boolean tipo) {
+        this.tipo = tipo;
     }
 
-    public int getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public int getIdClase() {
+    public Pregunta(int id, String idClase, String titulo, String descripcion, boolean tipo) {
+        this.idPregunta = id;
+        this.idClase = idClase;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.tipo = tipo;
+    }
+
+    public int getIdPregunta() {
+        return idPregunta;
+    }
+
+    public void setIdPregunta(int idPregunta) {
+        this.idPregunta = idPregunta;
+    }
+
+    public String getIdClase() {
         return idClase;
     }
 
-    public void setIdClase(int idClase) {
+    public void setIdClase(String idClase) {
         this.idClase = idClase;
     }
 

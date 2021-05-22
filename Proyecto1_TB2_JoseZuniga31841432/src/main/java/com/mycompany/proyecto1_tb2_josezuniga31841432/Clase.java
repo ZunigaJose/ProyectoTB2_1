@@ -7,11 +7,11 @@ import org.bson.types.ObjectId;
 public class Clase {
     private ObjectId id;
     @BsonProperty(value = "id")
-    private char[] idClase = new char[6];
+    private int idClase;
     private String nombreClase;
 
-    public Clase(String id, String nombreClase) {
-        this.idClase = id.toCharArray();
+    public Clase(int id, String nombreClase) {
+        this.idClase = id;
         this.nombreClase = nombreClase;
     }
 
@@ -34,16 +34,16 @@ public class Clase {
         this.id = id;
     }
 
-    public String getIdClase() {
-        return new String(idClase);
+    public int getIdClase() {
+        return idClase;
     }
 
-    public void setIdClase(String idClase) {
-        this.idClase = idClase.toCharArray();
+    public void setIdClase(int idClase) {
+        this.idClase = idClase;
     }
     
     @Override
     public String toString() {
-        return new String(idClase) + ": " + nombreClase;
+        return idClase + ": " + nombreClase;
     }
 }

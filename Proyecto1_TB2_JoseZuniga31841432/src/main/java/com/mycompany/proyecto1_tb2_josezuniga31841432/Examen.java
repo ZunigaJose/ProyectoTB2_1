@@ -7,7 +7,7 @@ public class Examen {
     @BsonProperty(value = "id")
     private int idExamen;
     private int idClase, nPreguntas;    
-    private  ObjectId examenId;
+    private  ObjectId id;
 
     public Examen() {
     }
@@ -42,11 +42,11 @@ public class Examen {
         this.nPreguntas = nPreguntas;
     }
 
-    public ObjectId getExamenId() {
-        return examenId;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setExamenId(ObjectId examenId) {
-        this.examenId = examenId;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 }

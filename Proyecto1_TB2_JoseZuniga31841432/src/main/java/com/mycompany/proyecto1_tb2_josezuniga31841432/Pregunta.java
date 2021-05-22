@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 public class Pregunta {
     @BsonProperty(value = "id")
     private int idPregunta;
-    private String idClase;
+    private int idClase;
     private String titulo, descripcion;
     @BsonProperty(value = "_id")
     private  ObjectId id;
@@ -31,7 +31,7 @@ public class Pregunta {
         this.id = id;
     }
 
-    public Pregunta(int id, String idClase, String titulo, String descripcion, boolean tipo) {
+    public Pregunta(int id, int idClase, String titulo, String descripcion, boolean tipo) {
         this.idPregunta = id;
         this.idClase = idClase;
         this.titulo = titulo;
@@ -47,11 +47,11 @@ public class Pregunta {
         this.idPregunta = idPregunta;
     }
 
-    public String getIdClase() {
+    public int getIdClase() {
         return idClase;
     }
 
-    public void setIdClase(String idClase) {
+    public void setIdClase(int idClase) {
         this.idClase = idClase;
     }
 
@@ -71,4 +71,8 @@ public class Pregunta {
         this.descripcion = descripcion;
     }
     
+    @Override
+    public String toString() {
+        return titulo;
+    }
 }

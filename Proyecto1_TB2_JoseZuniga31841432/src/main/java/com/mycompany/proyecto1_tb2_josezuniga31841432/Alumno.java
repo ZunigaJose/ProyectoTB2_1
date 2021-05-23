@@ -3,16 +3,19 @@ package com.mycompany.proyecto1_tb2_josezuniga31841432;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
+import java.util.List;
 
 public class Alumno {
     private  ObjectId id;
     private  String nombre, login, pass;
     @BsonProperty(value = "id")
     private int alumnoId;
+    private List<Nota> notas = new ArrayList<>();
     
 
     public Alumno(String nombre, String login, String pass, int id) {
@@ -61,8 +64,20 @@ public class Alumno {
         return alumnoId;
     }
 
+    public List<Nota> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(List<Nota> notas) {
+        this.notas = notas;
+    }
+
     public void setAlumnoId(int alumnoId) {
         this.alumnoId = alumnoId;
+    }
+    
+    public void addNota(Nota nota) {
+        notas.add(nota);
     }
     
     private String sha(String pass){

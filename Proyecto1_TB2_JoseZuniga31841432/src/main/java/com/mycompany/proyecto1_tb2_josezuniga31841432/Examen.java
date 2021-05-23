@@ -6,7 +6,9 @@ import org.bson.types.ObjectId;
 public class Examen {
     @BsonProperty(value = "id")
     private int idExamen;
-    private int idClase, nPreguntas;    
+    private int idClase;
+    @BsonProperty(value= "nPreguntas")
+    private int cantPreguntas;
     private  ObjectId id;
 
     public Examen() {
@@ -15,7 +17,7 @@ public class Examen {
     public Examen(int id, int idClase, int nPreguntas) {
         this.idExamen = id;
         this.idClase = idClase;
-        this.nPreguntas = nPreguntas;
+        this.cantPreguntas = nPreguntas;
     }
 
     public int getIdExamen() {
@@ -34,12 +36,12 @@ public class Examen {
         this.idClase = idClase;
     }
 
-    public int getnPreguntas() {
-        return nPreguntas;
+    public int getCantPreguntas() {
+        return cantPreguntas;
     }
 
-    public void setnPreguntas(int nPreguntas) {
-        this.nPreguntas = nPreguntas;
+    public void setCantPreguntas(int cantPreguntas) {
+        this.cantPreguntas = cantPreguntas;
     }
 
     public ObjectId getId() {

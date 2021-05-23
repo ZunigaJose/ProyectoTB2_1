@@ -11,11 +11,16 @@ import com.mongodb.ConnectionString;
 import com.mongodb.ServerAddress;
 import com.mongodb.MongoCredential;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Aggregates.lookup;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.model.FindOneAndReplaceOptions;
+import com.mongodb.client.model.ReturnDocument;
 import java.awt.event.ItemEvent;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -23,6 +28,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -57,6 +63,9 @@ public class Principal extends javax.swing.JFrame {
     MongoCollection<Pregunta> clPregunta = null;
     MongoCollection<Examen> clExamen = null;
     boolean flagModificacion = false;
+    Stack<Pregunta> preguntas = null;
+    double puntosPorpregunta = 0;
+    
     public Principal() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -74,6 +83,7 @@ public class Principal extends javax.swing.JFrame {
         clClase = database.getCollection("Clases", Clase.class);
         clPregunta = database.getCollection("Preguntas", Pregunta.class);
         clExamen = database.getCollection("Examenes", Examen.class);
+        //x();
     }
 
     /**
@@ -134,11 +144,16 @@ public class Principal extends javax.swing.JFrame {
         jDialog1 = new javax.swing.JDialog();
         pantallaExamen = new javax.swing.JDialog();
         jPanel8 = new javax.swing.JPanel();
-        labelTituloExamen = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        labelPreguntaExamen = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        examenNext = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        labelNPregunta = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        labelPreguntaExamen = new javax.swing.JLabel();
+        labelTitPregunta = new javax.swing.JLabel();
+        jrbTrue = new javax.swing.JRadioButton();
+        jrbFalse = new javax.swing.JRadioButton();
+        bgroupExamen = new javax.swing.ButtonGroup();
         principalIngresar = new javax.swing.JButton();
         princilalRegistro = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -478,7 +493,7 @@ public class Principal extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1)
                 .addContainerGap())
@@ -518,22 +533,60 @@ public class Principal extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelPreguntaExamen, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelPreguntaExamen, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-        );
-
-        jButton3.setText("Siguiente Pregunta");
+        examenNext.setText("Siguiente Pregunta");
+        examenNext.setEnabled(false);
+        examenNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                examenNextActionPerformed(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 0, 0));
         jLabel14.setText("¡Pasar a la siguiente pregunta le impedira volver atras y cambiar su respuesta!");
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel15.setText("Pregunta:");
+
+        labelNPregunta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelNPregunta.setText("n");
+
+        labelPreguntaExamen.setText("preeguntads");
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelPreguntaExamen, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addComponent(labelPreguntaExamen, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        labelTitPregunta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelTitPregunta.setText("Titulo Pregunta");
+
+        bgroupExamen.add(jrbTrue);
+        jrbTrue.setText("Verdadero");
+        jrbTrue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrbTrueActionPerformed(evt);
+            }
+        });
+
+        bgroupExamen.add(jrbFalse);
+        jrbFalse.setText("Falso");
+        jrbFalse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrbFalseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -542,29 +595,45 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelTituloExamen)
-                            .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addComponent(jLabel14)
                         .addGap(26, 26, 26)
-                        .addComponent(jButton3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(examenNext))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelNPregunta))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(184, 184, 184)
+                        .addComponent(jrbTrue)
+                        .addGap(175, 175, 175)
+                        .addComponent(jrbFalse))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelTitPregunta))))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(labelTituloExamen)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 131, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(jLabel15)
+                    .addComponent(labelNPregunta))
+                .addGap(58, 58, 58)
+                .addComponent(labelTitPregunta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrbTrue)
+                    .addComponent(jrbFalse))
+                .addGap(73, 73, 73)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(examenNext)
                     .addComponent(jLabel14))
                 .addContainerGap())
         );
@@ -614,25 +683,24 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
-                            .addComponent(principalLogin)
-                            .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addComponent(principalIngresar)
-                        .addGap(72, 72, 72)
-                        .addComponent(princilalRegistro)))
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addGap(80, 80, 80)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5)
+                    .addComponent(principalLogin)
+                    .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(principalIngresar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addComponent(princilalRegistro)
+                .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(79, 79, 79)
+                .addGap(81, 81, 81)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(principalLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -640,7 +708,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(principalIngresar)
                     .addComponent(princilalRegistro))
@@ -707,6 +775,10 @@ public class Principal extends javax.swing.JFrame {
                         llenarArbolClases();
                         //Bson Filter = and(eq("idClase", 2), eq("cantPreguntas", 1));
                         //examen.find(and(eq("idClase", 2), eq("cantPreguntas", 1))).projection(Filter).first().getnPreguntas();
+                    } else {
+                        //hacer el login de gente normal aqui 
+                        //y quitar esto de aqui
+                        mostrarExamen(2);
                     }
                 } else {
                     JOptionPane.showMessageDialog(pantallaRegistro, "Contraseña Incorrecta, Favor Vuelva a intentar.",
@@ -815,9 +887,10 @@ public class Principal extends javax.swing.JFrame {
             return;
         }
         int idex = (int) clExamen.countDocuments() + 1;
+        int npreguntas = (int)crearExamenSpinner.getValue();
         Examen examen = new Examen(idex,
-                Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getIdClase(),
-                (int) crearExamenSpinner.getModel().getValue());
+                Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getIdClase(), npreguntas);
+        System.out.println(examen.getCantPreguntas());
         try {
             clExamen.insertOne(examen);
         } catch (com.mongodb.MongoWriteException we) {
@@ -829,10 +902,12 @@ public class Principal extends javax.swing.JFrame {
                 registroNombre.setText("");
                 registroPass.setText("");
                 errormsg = "Ocurrio un error al intentar ingresar el usuario, favor intente nuevamente";
+                JOptionPane.showMessageDialog(pantallaRegistro, errormsg,
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         } finally {
-            JOptionPane.showMessageDialog(pantallaRegistro, "Pregunta añadida exitosamente",
+            JOptionPane.showMessageDialog(pantallaRegistro, "Examen creado exitosamente",
                 "Exito", JOptionPane.INFORMATION_MESSAGE);
             flagModificacion = true;
         }
@@ -855,6 +930,49 @@ public class Principal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jTree1MouseClicked
+
+    private void examenNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_examenNextActionPerformed
+        if (bgroupExamen.getSelection() != null && !preguntas.isEmpty()) {
+            if (jrbTrue.isSelected() == preguntas.pop().isTipo()) {//Evalua que la respuesta sea correcta
+                alumnoIngresado.getNotas().get(0).sumarNota(puntosPorpregunta);
+                System.out.println("Buena");
+            } else {
+                System.out.println("Mala");
+            }
+            if (preguntas.size() >= 1) {
+                examenNext.setEnabled(false);
+                Pregunta pregunta = preguntas.peek();
+                bgroupExamen.clearSelection();
+                labelTitPregunta.setText(pregunta.getTitulo());
+                labelNPregunta.setText("" + (Integer.parseInt(labelNPregunta.getText()) + 1));
+                labelPreguntaExamen.setText("<html>" + pregunta.getDescripcion() + "</html>");
+            }
+            if (preguntas.size() == 1) {
+                examenNext.setText("Enviar Examen");
+            }
+        } 
+        if (bgroupExamen.getSelection() != null) {
+            pantallaExamen.setVisible(false);
+            try {
+                alumnoIngresado = clAlumno.findOneAndReplace(eq("login", alumnoIngresado.getLogin()),
+                        alumnoIngresado,
+                        new FindOneAndReplaceOptions().returnDocument(ReturnDocument.AFTER));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(pantallaRegistro, "Ocurrio un erro al guardar su examen"
+                        + " debera repetirlo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            //Pantallita con resulados?
+        }
+    }//GEN-LAST:event_examenNextActionPerformed
+
+    private void jrbTrueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbTrueActionPerformed
+        examenNext.setEnabled(true);
+    }//GEN-LAST:event_jrbTrueActionPerformed
+
+    private void jrbFalseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbFalseActionPerformed
+        examenNext.setEnabled(true);
+    }//GEN-LAST:event_jrbFalseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -890,10 +1008,11 @@ public class Principal extends javax.swing.JFrame {
             }
         });
     }
-
+//<editor-fold defaultstate="collapsed" desc=" Variables que me estorban">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadirClase;
     private javax.swing.JButton añadirPregunta;
+    private javax.swing.ButtonGroup bgroupExamen;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<Clase> cb_ExamenesSelectClase;
     private javax.swing.JComboBox<Clase> cb_preguntasSelectClase;
@@ -901,9 +1020,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton creaVerdadero;
     private javax.swing.JSpinner crearExamenSpinner;
     private javax.swing.JTextArea descripcionPregunta;
+    private javax.swing.JButton examenNext;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -911,6 +1030,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -923,6 +1043,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -930,15 +1051,17 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
+    private javax.swing.JRadioButton jrbFalse;
+    private javax.swing.JRadioButton jrbTrue;
     private javax.swing.JLabel labelDetallePregunta;
+    private javax.swing.JLabel labelNPregunta;
     private javax.swing.JLabel labelPreguntaExamen;
-    private javax.swing.JLabel labelTituloExamen;
+    private javax.swing.JLabel labelTitPregunta;
     private javax.swing.JTextField nuevaClaseNombre;
     private javax.swing.JDialog panelAdmin;
     private javax.swing.JDialog pantallaExamen;
@@ -953,7 +1076,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton registroRegistrar;
     private javax.swing.JTextArea tituloPregunta;
     // End of variables declaration//GEN-END:variables
-    
+      //</editor-fold>
     String getUserPassword(String user) throws NullPointerException {
         return clAlumno.find(eq("login", user)).first().getPass();
     }
@@ -996,16 +1119,40 @@ public class Principal extends javax.swing.JFrame {
         Bson filter = eq("idClase", idClase);
         int cantPreguntas = 0;
         try {
-            cantPreguntas = clExamen.find(filter).first().getnPreguntas();
+            cantPreguntas = clExamen.find(filter).first().getCantPreguntas();
+            System.out.println(cantPreguntas);
         } catch (Exception e) {
             
         }
-        List preguntas = 
+        puntosPorpregunta = (cantPreguntas > 0) ? 100/cantPreguntas : 0;
+        List preg = 
                 clPregunta.find(filter).into(new ArrayList<>());
-        Collections.shuffle(preguntas);
+        Collections.shuffle(preg);
         Stack<Pregunta> stck = new Stack<>();
-        stck.addAll(preguntas.subList(0, cantPreguntas));
+        stck.addAll(preg.subList(0, cantPreguntas));
         return stck;
+    }
+    
+    /*void x() {
+        MongoCollection<Document> collection = database.getCollection("Examenes");
+        Bson pipeline = lookup("Clases", "idClase", "id", "idClase");
+        ArrayList<Document> examenesjoined = new ArrayList<>();
+        ArrayList<Document> x = collection.aggregate(Collections.singletonList(pipeline)).into(new ArrayList<Document>());
+        x.forEach(pr -> System.out.println(pr));
+    }*/
+    
+    void mostrarExamen(int idClase) {
+        alumnoIngresado.getNotas().add(0, new Nota(idClase, 0));
+        preguntas = generarExamen(idClase);
+        labelNPregunta.setText("1");
+        examenNext.setText("Siguiente Pregunta");
+        examenNext.setEnabled(false);
+        Pregunta pregunta = preguntas.peek();
+        labelTitPregunta.setText(pregunta.getTitulo());
+        labelPreguntaExamen.setText(pregunta.getDescripcion());
+        pantallaExamen.pack();
+        pantallaExamen.setModal(true);
+        pantallaExamen.setVisible(true);
     }
     
     void llenarArbolClases() {

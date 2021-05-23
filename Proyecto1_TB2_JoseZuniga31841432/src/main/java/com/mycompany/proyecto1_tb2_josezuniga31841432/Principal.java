@@ -28,12 +28,15 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -83,7 +86,7 @@ public class Principal extends javax.swing.JFrame {
         clClase = database.getCollection("Clases", Clase.class);
         clPregunta = database.getCollection("Preguntas", Pregunta.class);
         clExamen = database.getCollection("Examenes", Examen.class);
-        //x();
+        //generateMap();
     }
 
     /**
@@ -141,7 +144,12 @@ public class Principal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jDialog1 = new javax.swing.JDialog();
+        pantallaAlumno = new javax.swing.JDialog();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jlistDisponibles = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jlistTomados = new javax.swing.JList<>();
         pantallaExamen = new javax.swing.JDialog();
         jPanel8 = new javax.swing.JPanel();
         examenNext = new javax.swing.JButton();
@@ -522,15 +530,50 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        jlistDisponibles.setModel(new DefaultListModel());
+        jScrollPane4.setViewportView(jlistDisponibles);
+
+        jlistTomados.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "1", "2", "3", "4", "5", " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane5.setViewportView(jlistTomados);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap(142, Short.MAX_VALUE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(85, 85, 85))
+        );
+
+        javax.swing.GroupLayout pantallaAlumnoLayout = new javax.swing.GroupLayout(pantallaAlumno.getContentPane());
+        pantallaAlumno.getContentPane().setLayout(pantallaAlumnoLayout);
+        pantallaAlumnoLayout.setHorizontalGroup(
+            pantallaAlumnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pantallaAlumnoLayout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        pantallaAlumnoLayout.setVerticalGroup(
+            pantallaAlumnoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pantallaAlumnoLayout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         examenNext.setText("Siguiente Pregunta");
@@ -778,7 +821,8 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         //hacer el login de gente normal aqui 
                         //y quitar esto de aqui
-                        mostrarExamen(2);
+                        //mostrarExamen(2);
+                        mostrarPantallaAlumno();
                     }
                 } else {
                     JOptionPane.showMessageDialog(pantallaRegistro, "Contraseña Incorrecta, Favor Vuelva a intentar.",
@@ -1023,7 +1067,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton examenNext;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1051,11 +1094,16 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
+    private javax.swing.JList<Examen> jlistDisponibles;
+    private javax.swing.JList<String> jlistTomados;
     private javax.swing.JRadioButton jrbFalse;
     private javax.swing.JRadioButton jrbTrue;
     private javax.swing.JLabel labelDetallePregunta;
@@ -1064,6 +1112,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel labelTitPregunta;
     private javax.swing.JTextField nuevaClaseNombre;
     private javax.swing.JDialog panelAdmin;
+    private javax.swing.JDialog pantallaAlumno;
     private javax.swing.JDialog pantallaExamen;
     private javax.swing.JDialog pantallaRegistro;
     private javax.swing.JButton princilalRegistro;
@@ -1133,13 +1182,38 @@ public class Principal extends javax.swing.JFrame {
         return stck;
     }
     
-    /*void x() {
+    Map<Integer, String> generateMap() {
         MongoCollection<Document> collection = database.getCollection("Examenes");
-        Bson pipeline = lookup("Clases", "idClase", "id", "idClase");
-        ArrayList<Document> examenesjoined = new ArrayList<>();
-        ArrayList<Document> x = collection.aggregate(Collections.singletonList(pipeline)).into(new ArrayList<Document>());
-        x.forEach(pr -> System.out.println(pr));
-    }*/
+        Bson pipeline = lookup("Clases", "idClase", "id", "Clase");
+        Map<Integer, String> map =  new HashMap<>();
+        ArrayList<Document> x = collection.aggregate(Collections.singletonList(pipeline))
+                .into(new ArrayList<Document>());
+        //x.forEach(pr -> ((Document)pr.get("Clase")).get(pr));
+        int id;
+        String nombre;
+        Document segundoDoc;
+        for (Document document : x) {
+            segundoDoc = ((Document)((ArrayList)document.get("Clase")).get(0));
+            id = (int) segundoDoc.get("id");
+            nombre = (String) segundoDoc.get("nombreClase");
+            map.put(id, nombre);
+            System.out.println(document.get("Clase"));
+        }
+        return map;
+    }
+    
+    void mostrarPantallaAlumno() {
+        ExamenDisponibleRenderer dispRender = new ExamenDisponibleRenderer();
+        dispRender.setMap(generateMap());
+        jlistDisponibles.setCellRenderer(dispRender);
+        //solo para muestra
+        DefaultListModel<Examen> modelo = new DefaultListModel<>();
+        modelo.addAll(clExamen.find().into(new ArrayList<Examen>()));
+        jlistDisponibles.setModel(modelo);
+        pantallaAlumno.pack();
+        pantallaAlumno.setLocationRelativeTo(this);
+        pantallaAlumno.setVisible(true);
+    }
     
     void mostrarExamen(int idClase) {
         alumnoIngresado.getNotas().add(0, new Nota(idClase, 0));

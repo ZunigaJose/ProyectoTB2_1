@@ -17,7 +17,7 @@ public class ExamenTomadoRenderer extends JLabel implements ListCellRenderer<Not
     @Override
     public Component getListCellRendererComponent(JList<? extends Nota> list, Nota value, int index, boolean isSelected, boolean cellHasFocus) {
        String data = "<html><h4>" +  map.get(value.getIdExamen()) + "</h4>" + "idExamen: " +
-            value.getIdExamen() + "<br>" + (value.getNota() < 60 ? "<font color='red'>" : "<font color='green'>")
+            value.getIdExamen() + "<br>" + "<font color='green'>"
             +  "Nota: " + value.getNota() +"</font></html>";
         setText(data);
         if(cellHasFocus) {

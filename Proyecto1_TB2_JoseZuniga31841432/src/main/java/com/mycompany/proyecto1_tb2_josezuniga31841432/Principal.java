@@ -14,7 +14,6 @@ import static com.mongodb.client.model.Aggregates.lookup;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReturnDocument;
-import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -32,8 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -739,7 +736,7 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addComponent(jLabel14)
-                        .addGap(26, 26, 26)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(examenNext))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
@@ -748,15 +745,17 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(labelNPregunta))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelTitPregunta)))
+                        .addComponent(labelTitPregunta))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(239, 239, 239)
                         .addComponent(jrbTrue)
                         .addGap(82, 82, 82)
                         .addComponent(jrbFalse)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -767,11 +766,12 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(labelNPregunta))
                 .addGap(58, 58, 58)
                 .addComponent(labelTitPregunta)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(examenNext)
                             .addComponent(jLabel14))
@@ -788,7 +788,7 @@ public class Principal extends javax.swing.JFrame {
         pantallaExamen.getContentPane().setLayout(pantallaExamenLayout);
         pantallaExamenLayout.setHorizontalGroup(
             pantallaExamenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pantallaExamenLayout.setVerticalGroup(
             pantallaExamenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1022,7 +1022,6 @@ public class Principal extends javax.swing.JFrame {
         int npreguntas = (int)crearExamenSpinner.getValue();
         Examen examen = new Examen(idex,
                 Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getIdClase(), npreguntas);
-        System.out.println(examen.getCantPreguntas());
         try {
             clExamen.insertOne(examen);
             JOptionPane.showMessageDialog(pantallaRegistro, "Examen creado exitosamente",
@@ -1079,7 +1078,6 @@ public class Principal extends javax.swing.JFrame {
             }
         } 
         if (bgroupExamen.getSelection() != null) {
-            pantallaExamen.setVisible(false);
             try {
                 alumnoIngresado = clAlumno.findOneAndReplace(eq("login", alumnoIngresado.getLogin()),
                         alumnoIngresado,
@@ -1088,6 +1086,7 @@ public class Principal extends javax.swing.JFrame {
                         alumnoIngresado.getNotas().get(0).getNota() + " puntos de " +
                         (jlistDisponibles.getSelectedValue().getCantPreguntas() * 5),
                         "Nota", JOptionPane.INFORMATION_MESSAGE);
+                pantallaExamen.setVisible(false);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(pantallaRegistro, "Ocurrio un erro al guardar su examen"
                         + " debera repetirlo", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1322,7 +1321,6 @@ public class Principal extends javax.swing.JFrame {
         int cantPreguntas = 0;
         try {
             cantPreguntas = clExamen.find(filter).first().getCantPreguntas();
-            System.out.println(cantPreguntas);
         } catch (Exception e) {
             
         }
@@ -1349,7 +1347,6 @@ public class Principal extends javax.swing.JFrame {
             id = (int) document.get("id");
             nombre = (String) segundoDoc.get("nombreClase");
             map.put(id, nombre);
-            System.out.println(document.get("Clase"));
         }
         return map;
     }

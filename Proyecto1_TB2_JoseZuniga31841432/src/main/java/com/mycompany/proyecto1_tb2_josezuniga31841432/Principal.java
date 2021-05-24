@@ -6,30 +6,24 @@
 package com.mycompany.proyecto1_tb2_josezuniga31841432;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoClient;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.ConnectionString;
-import com.mongodb.ServerAddress;
-import com.mongodb.MongoCredential;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.client.AggregateIterable;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Aggregates.lookup;
-import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReturnDocument;
 import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -194,23 +188,26 @@ public class Principal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(43, 43, 43)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(registroNombre)
-                    .addComponent(registroLogin)
-                    .addComponent(registroPass, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(167, 167, 167)
-                .addComponent(registroRegistrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addGap(167, 344, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(32, 32, 32))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(registroNombre)
+                            .addComponent(registroLogin)
+                            .addComponent(registroPass, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(180, 180, 180)
+                        .addComponent(registroRegistrar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,10 +225,10 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(registroPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(registroRegistrar)
-                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addComponent(registroRegistrar)
+                .addGap(14, 14, 14)
+                .addComponent(jButton1)
                 .addGap(29, 29, 29))
         );
 
@@ -246,6 +243,7 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        panelAdmin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         panelAdmin.setResizable(false);
 
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -507,10 +505,30 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jMenu1.setText("File");
+        jMenu1.setText("Cerrar Sesion ");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Salir");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         panelAdmin.setJMenuBar(jMenuBar1);
@@ -531,13 +549,14 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jlistDisponibles.setModel(new DefaultListModel());
+        jlistDisponibles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlistDisponiblesMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(jlistDisponibles);
 
-        jlistTomados.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "1", "2", "3", "4", "5", " " };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jlistTomados.setModel(new DefaultListModel());
         jScrollPane5.setViewportView(jlistTomados);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -575,6 +594,10 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        pantallaExamen.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        pantallaExamen.setUndecorated(true);
+        pantallaExamen.setResizable(false);
 
         examenNext.setText("Siguiente Pregunta");
         examenNext.setEnabled(false);
@@ -726,19 +749,19 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5)
-                    .addComponent(principalLogin)
-                    .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addComponent(principalIngresar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addComponent(princilalRegistro)
                 .addGap(33, 33, 33))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5)
+                    .addComponent(principalLogin)
+                    .addComponent(principalPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(85, 85, 85))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -788,6 +811,16 @@ public class Principal extends javax.swing.JFrame {
             }
             registroLogin.setText("");
             JOptionPane.showMessageDialog(pantallaRegistro, errormsg, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } finally {
+            JOptionPane.showMessageDialog(pantallaRegistro, "Usuario Ingresado exitosamente",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            pantallaRegistro.setVisible(false);
+            registroLogin.setText("");
+            registroNombre.setText("");
+            registroPass.setText("");
+            this.setLocationRelativeTo(this);
+            this.setVisible(true);
         }
     }//GEN-LAST:event_registroRegistrarActionPerformed
 
@@ -813,6 +846,7 @@ public class Principal extends javax.swing.JFrame {
                     alumnoIngresado = clAlumno.find(eq("login", principalLogin.getText())).first();
                     if (alumnoIngresado.getLogin().equals("Admin")) {
                         panelAdmin.pack();
+                        panelAdmin.setLocationRelativeTo(this);
                         panelAdmin.setVisible(true);
                         this.setVisible(false);
                         llenarArbolClases();
@@ -959,7 +993,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTree1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseClicked
-        if (evt.isMetaDown()) {
+        if (evt.getClickCount() == 2) {
             int row = jTree1.getClosestRowForLocation(evt.getX(), evt.getY());
             jTree1.setSelectionRow(row);
             Object v1 = jTree1.getSelectionPath().getLastPathComponent();
@@ -979,9 +1013,6 @@ public class Principal extends javax.swing.JFrame {
         if (bgroupExamen.getSelection() != null && !preguntas.isEmpty()) {
             if (jrbTrue.isSelected() == preguntas.pop().isTipo()) {//Evalua que la respuesta sea correcta
                 alumnoIngresado.getNotas().get(0).sumarNota(puntosPorpregunta);
-                System.out.println("Buena");
-            } else {
-                System.out.println("Mala");
             }
             if (preguntas.size() >= 1) {
                 examenNext.setEnabled(false);
@@ -1005,8 +1036,9 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(pantallaRegistro, "Ocurrio un erro al guardar su examen"
                         + " debera repetirlo", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
+            } finally {
+                mostrarPantallaAlumno();
             }
-            //Pantallita con resulados?
         }
     }//GEN-LAST:event_examenNextActionPerformed
 
@@ -1017,6 +1049,42 @@ public class Principal extends javax.swing.JFrame {
     private void jrbFalseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbFalseActionPerformed
         examenNext.setEnabled(true);
     }//GEN-LAST:event_jrbFalseActionPerformed
+
+    private void jlistDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistDisponiblesMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (jlistDisponibles.getSelectedValue() != null) {
+                if (JOptionPane.showConfirmDialog(pantallaAlumno, 
+                        "¿Esta seguro que desea realizar el examen con ID " 
+                                + jlistDisponibles.getSelectedValue().getIdExamen() 
+                                + "?", "Confirmar", JOptionPane.YES_NO_OPTION, 
+                                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                    mostrarExamen(jlistDisponibles.getSelectedValue().getIdClase(),
+                            jlistDisponibles.getSelectedValue().getIdExamen());
+                    pantallaAlumno.setVisible(false);
+                }
+            }
+        }
+    }//GEN-LAST:event_jlistDisponiblesMouseClicked
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        panelAdmin.dispose();
+        this.pack();
+        this.setVisible(true);
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        panelAdmin.dispose();
+        this.pack();
+        this.setVisible(true);
+    }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_jMenu2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1103,7 +1171,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
     private javax.swing.JList<Examen> jlistDisponibles;
-    private javax.swing.JList<String> jlistTomados;
+    private javax.swing.JList<Nota> jlistTomados;
     private javax.swing.JRadioButton jrbFalse;
     private javax.swing.JRadioButton jrbTrue;
     private javax.swing.JLabel labelDetallePregunta;
@@ -1194,7 +1262,7 @@ public class Principal extends javax.swing.JFrame {
         Document segundoDoc;
         for (Document document : x) {
             segundoDoc = ((Document)((ArrayList)document.get("Clase")).get(0));
-            id = (int) segundoDoc.get("id");
+            id = (int) document.get("id");
             nombre = (String) segundoDoc.get("nombreClase");
             map.put(id, nombre);
             System.out.println(document.get("Clase"));
@@ -1203,20 +1271,33 @@ public class Principal extends javax.swing.JFrame {
     }
     
     void mostrarPantallaAlumno() {
+        Map<Integer, String> map =  new HashMap<>();
+        map = generateMap();
         ExamenDisponibleRenderer dispRender = new ExamenDisponibleRenderer();
-        dispRender.setMap(generateMap());
+        dispRender.setMap(map);
         jlistDisponibles.setCellRenderer(dispRender);
-        //solo para muestra
+        //jlist Disonibles
         DefaultListModel<Examen> modelo = new DefaultListModel<>();
-        modelo.addAll(clExamen.find().into(new ArrayList<Examen>()));
+        ArrayList<Integer> sublist = new ArrayList<>();
+        alumnoIngresado.getNotas().forEach(nota -> sublist.add(nota.getIdExamen()));
+        ArrayList<Examen> subExamenes = clExamen.find().into(new ArrayList<Examen>()); 
+        subExamenes.removeIf(exa -> (sublist.contains(exa.getIdExamen())));
+        modelo.addAll(subExamenes);
         jlistDisponibles.setModel(modelo);
+        //jlistTomados
+        DefaultListModel<Nota> modelo2 = new DefaultListModel();
+        modelo2.addAll(alumnoIngresado.getNotas());
+        ExamenTomadoRenderer tomaRender = new ExamenTomadoRenderer();
+        tomaRender.setMap(map);
+        jlistTomados.setCellRenderer(tomaRender);
+        jlistTomados.setModel(modelo2);
         pantallaAlumno.pack();
         pantallaAlumno.setLocationRelativeTo(this);
         pantallaAlumno.setVisible(true);
     }
     
-    void mostrarExamen(int idClase) {
-        alumnoIngresado.getNotas().add(0, new Nota(idClase, 0));
+    void mostrarExamen(int idClase, int idExamen) {
+        alumnoIngresado.getNotas().add(0, new Nota(idExamen, 0));
         preguntas = generarExamen(idClase);
         labelNPregunta.setText("1");
         examenNext.setText("Siguiente Pregunta");
@@ -1226,6 +1307,7 @@ public class Principal extends javax.swing.JFrame {
         labelPreguntaExamen.setText(pregunta.getDescripcion());
         pantallaExamen.pack();
         pantallaExamen.setModal(true);
+        pantallaExamen.setLocationRelativeTo(this);
         pantallaExamen.setVisible(true);
     }
     
@@ -1257,4 +1339,18 @@ public class Principal extends javax.swing.JFrame {
         modelo.reload();
         jTree1.setModel(modelo);
     }
+    WindowListener exitListener = new WindowAdapter() {
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        int confirm = JOptionPane.showOptionDialog(
+             e.getWindow(), "¿Esta seguro que quiere salir?", 
+             "Salir", JOptionPane.YES_NO_OPTION, 
+             JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (confirm == 0) {
+           System.exit(0);
+        }
+    }
+};
+    
 }

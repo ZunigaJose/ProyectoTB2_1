@@ -1,15 +1,12 @@
 package com.mycompany.proyecto1_tb2_josezuniga31841432;
 
-import com.mongodb.client.FindIterable;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import org.bson.Document;
 
 public class ExamenDisponibleRenderer extends JLabel implements ListCellRenderer<Examen> {
     private Map<Integer, String> map = new HashMap<>();
@@ -27,7 +24,7 @@ public class ExamenDisponibleRenderer extends JLabel implements ListCellRenderer
 
     @Override
     public Component getListCellRendererComponent(JList<? extends Examen> list, Examen value, int index, boolean isSelected, boolean cellHasFocus) {
-        String data = "<html><h4>" +  map.get(value.getIdClase()) + "</h4>" + "idExamen: " +
+        String data = "<html><h4>" +  map.get(value.getIdExamen()) + "</h4>" + "idExamen: " +
             value.getIdExamen() + " Cantidad Preguntas: " + value.getCantPreguntas() +"</html>";
         setText(data);
         if (isSelected) {
@@ -37,6 +34,8 @@ public class ExamenDisponibleRenderer extends JLabel implements ListCellRenderer
             setBackground(null);
             setForeground(null);
         }
+        setIcon(new javax.swing.ImageIcon(getClass().getResource("/ExaDisponible.png")));
+        setHorizontalTextPosition(JLabel.RIGHT);
         return this;
     }
     

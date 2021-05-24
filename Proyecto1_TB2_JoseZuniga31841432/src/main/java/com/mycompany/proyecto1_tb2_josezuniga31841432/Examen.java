@@ -51,4 +51,9 @@ public class Examen {
     public void setId(ObjectId id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "idExamen: " + idExamen + ", Numero Preguntas: " + cantPreguntas;
+    }
 }

@@ -2,6 +2,7 @@ package com.mycompany.proyecto1_tb2_josezuniga31841432;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
+import java.time.LocalDateTime;
 
 public class Examen {
     @BsonProperty(value = "id")
@@ -9,6 +10,7 @@ public class Examen {
     private int idClase;
     @BsonProperty(value= "nPreguntas")
     private int cantPreguntas;
+    private LocalDateTime fechaAplicacion;
     private  ObjectId id;
 
     public Examen() {
@@ -50,6 +52,14 @@ public class Examen {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    public LocalDateTime getFechaAplicacion() {
+        return fechaAplicacion;
+    }
+
+    public void setFechaAplicacion(LocalDateTime fechaAplicacion) {
+        this.fechaAplicacion = fechaAplicacion;
     }
 
     @Override

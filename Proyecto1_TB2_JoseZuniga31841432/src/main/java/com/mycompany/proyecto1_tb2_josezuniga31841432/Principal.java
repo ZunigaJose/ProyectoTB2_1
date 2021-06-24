@@ -21,6 +21,9 @@ import java.awt.event.WindowListener;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -136,6 +139,8 @@ public class Principal extends javax.swing.JFrame {
         cb_ExamenesSelectClase = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
         jLabel23 = new javax.swing.JLabel();
+        dateTimePicker1 = new com.github.lgooddatepicker.components.DateTimePicker();
+        jLabel24 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -446,6 +451,8 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quiz.png"))); // NOI18N
 
+        jLabel24.setText("Fecha de Aplicacion");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -456,14 +463,21 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(crearExamenSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_ExamenesSelectClase, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(116, 116, 116))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel24)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(crearExamenSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cb_ExamenesSelectClase, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(dateTimePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(116, 116, 116))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,11 +486,15 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addGap(18, 18, 18)
                 .addComponent(cb_ExamenesSelectClase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(dateTimePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
                         .addComponent(jLabel12)
-                        .addGap(54, 54, 54)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(crearExamenSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -806,9 +824,12 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        detalleNota.setResizable(false);
+
         jPanel11.setBackground(new java.awt.Color(109, 183, 212));
 
         detallNotaList.setModel(new DefaultListModel());
+        detallNotaList.setFixedCellWidth(370);
         jScrollPane6.setViewportView(detallNotaList);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -836,7 +857,7 @@ public class Principal extends javax.swing.JFrame {
         );
         detalleNotaLayout.setVerticalGroup(
             detalleNotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1048,11 +1069,16 @@ public class Principal extends javax.swing.JFrame {
                 int min = list.isEmpty() ? 0 : 1;
                 SpinnerNumberModel modelo = new SpinnerNumberModel(currValue, min, list.size(), 1);
                 crearExamenSpinner.setModel(modelo);
+            } else {
+                SpinnerNumberModel modelo = new SpinnerNumberModel(0, 0, 0, 1);
+                crearExamenSpinner.setModel(modelo);
             }
         }
     }//GEN-LAST:event_cb_ExamenesSelectClaseItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        System.out.println(dateTimePicker1.getDateTimePermissive());
+        System.out.println(dateTimePicker1.getDateTimeStrict());
         if (cb_ExamenesSelectClase.getSelectedItem() == null) {
             JOptionPane.showMessageDialog(pantallaRegistro, "Debe de seleccionar una clase de las clases "
                     + " disponibles", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1062,30 +1088,48 @@ public class Principal extends javax.swing.JFrame {
                     + "disponibles. O añada preguntas o seleccione otra clase.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
+        } else if (dateTimePicker1.getDatePicker().getDate() == null) {
+            JOptionPane.showMessageDialog(pantallaRegistro, "Favor ingrese la fecha "
+                    + "en que será aplicado el examen.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (dateTimePicker1.getTimePicker().getTime() == null) {
+            JOptionPane.showMessageDialog(pantallaRegistro, "Favor ingrese la hora "
+                    + "en que será aplicado el examen.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         int idex = (int) clExamen.countDocuments() + 1;
         int npreguntas = (int)crearExamenSpinner.getValue();
         Examen examen = new Examen(idex,
                 Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getIdClase(), npreguntas);
+        examen.setFechaAplicacion(dateTimePicker1.getDateTimePermissive());
         try {
+            System.out.println("Estyudavusibi");
             clExamen.insertOne(examen);
+            Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getExamenes().add(examen);
+            clClase.findOneAndReplace(eq("id",
+                    Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getIdClase()),
+                    (Clase)cb_ExamenesSelectClase.getSelectedItem());
             JOptionPane.showMessageDialog(pantallaRegistro, "Examen creado exitosamente",
                 "Exito", JOptionPane.INFORMATION_MESSAGE);
             flagModificacion = true;
         } catch (com.mongodb.MongoWriteException we) {
             String errormsg;
-            if (we.getCode() == 11000) {
-                errormsg = "Actualmente ya existe un examen creado para la clase " + 
-                        Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getNombreClase();
-            } else {
+            //if (we.getCode() == 11000) {
+              //  errormsg = "Actualmente ya existe un examen creado para la clase " + 
+                //        Clase.class.cast(cb_ExamenesSelectClase.getSelectedItem()).getNombreClase();
+            //} else {
                 registroNombre.setText("");
                 registroPass.setText("");
                 errormsg = "Ocurrio un error al intentar ingresar el usuario, favor intente nuevamente";
-            }
+            //}
             JOptionPane.showMessageDialog(pantallaRegistro, errormsg,
                         "Error", JOptionPane.ERROR_MESSAGE);
         }
         cb_ExamenesSelectClase.setSelectedItem(null);
+        dateTimePicker1.getDatePicker().setDate(null);
+        dateTimePicker1.getTimePicker().setTime(null);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTree1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseClicked
@@ -1108,6 +1152,9 @@ public class Principal extends javax.swing.JFrame {
     private void examenNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_examenNextActionPerformed
         if (bgroupExamen.getSelection() != null && !preguntas.isEmpty()) {
             Pregunta preguntaAct = preguntas.pop();
+            PreguntaResuelta pr = new PreguntaResuelta(
+                    preguntaAct.getIdPregunta(), jrbTrue.isSelected());
+            alumnoIngresado.getNotas().get(0).getPreguntas().add(pr);
             if (jrbTrue.isSelected() == preguntaAct.isTipo()) {//Evalua que la respuesta sea correcta
                 alumnoIngresado.getNotas().get(0).sumarNota(puntosPorpregunta);
             }
@@ -1122,12 +1169,10 @@ public class Principal extends javax.swing.JFrame {
             if (preguntas.size() == 1) {
                 examenNext.setText("Enviar Examen");
             }
-            PreguntaResuelta pr = new PreguntaResuelta(
-                    preguntaAct.getIdPregunta(), jrbTrue.isSelected());
-            alumnoIngresado.getNotas().get(0).getPreguntas().add(pr);
-        } 
+        }
         if (bgroupExamen.getSelection() != null) {
             try {
+                
                 alumnoIngresado = clAlumno.findOneAndReplace(eq("login", alumnoIngresado.getLogin()),
                         alumnoIngresado,
                         new FindOneAndReplaceOptions().returnDocument(ReturnDocument.AFTER));
@@ -1156,6 +1201,16 @@ public class Principal extends javax.swing.JFrame {
 
     private void jlistDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistDisponiblesMouseClicked
         if (evt.getClickCount() == 2) {
+            if (jlistDisponibles.getSelectedValue().getFechaAplicacion().isAfter(LocalDateTime.now())) {
+                JOptionPane.showMessageDialog(pantallaRegistro, "El exmane aun no esta disponible,"
+                        + "Estara disponible el: " +
+                        jlistDisponibles.getSelectedValue()
+                        .getFechaAplicacion().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + " a las: " + 
+                        jlistDisponibles.getSelectedValue()
+                        .getFechaAplicacion().format(DateTimeFormatter.ofPattern("HH:mm")),
+                    "Error!", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             if (jlistDisponibles.getSelectedValue() != null) {
                 if (JOptionPane.showConfirmDialog(pantallaAlumno, 
                         "¿Esta seguro que desea realizar el examen con ID " 
@@ -1210,7 +1265,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jlistTomadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistTomadosMouseClicked
         if (evt.getClickCount() == 2) {
-            if (jlistDisponibles.getSelectedValue() != null) {
+            if (jlistTomados.getSelectedValue() != null) {
                 mostrarDetalleNota(jlistTomados.getSelectedValue());
                 //Pantalla Resultado detalleNota()
             }
@@ -1262,6 +1317,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton creaFalso;
     private javax.swing.JRadioButton creaVerdadero;
     private javax.swing.JSpinner crearExamenSpinner;
+    private com.github.lgooddatepicker.components.DateTimePicker dateTimePicker1;
     private javax.swing.JTextArea descripcionPregunta;
     private javax.swing.JList<PreguntaResuelta> detallNotaList;
     private javax.swing.JDialog detalleNota;
@@ -1283,6 +1339,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1469,11 +1526,13 @@ public class Principal extends javax.swing.JFrame {
         Map<Integer, Pregunta> map =  new HashMap<>();
         map = generateMapPreguntas(nota);
         DefaultListModel<PreguntaResuelta> modelo = new DefaultListModel<>();
-        
+        DetalleNotaRenderer renderer = new DetalleNotaRenderer();
+        renderer.setMap(map);
         modelo.addAll(nota.getPreguntas());
+        detallNotaList.setCellRenderer(renderer);
         detallNotaList.setModel(modelo);
-        detalleNota.setLocationRelativeTo(pantallaAlumno);
         detalleNota.pack();
+        detalleNota.setLocationRelativeTo(null);
         detalleNota.setVisible(true);
     }
             
@@ -1494,14 +1553,19 @@ public class Principal extends javax.swing.JFrame {
                 preguntas.forEach(pregunta -> preg.add(new DefaultMutableTreeNode(pregunta)));
                 ((DefaultMutableTreeNode)root.getChildAt(i)).add(preg);
             }
-            Examen ex = clExamen.find(eq("idClase",
+            ArrayList<Examen> ex = clExamen.find(eq("idClase",
                     ((Clase)((DefaultMutableTreeNode)root.getChildAt(i)).getUserObject()).getIdClase()))
-                    .first();
-            if (ex != null) {
+                    .into(new ArrayList<Examen>());
+            if (!ex.isEmpty()) {
+                DefaultMutableTreeNode exa = new DefaultMutableTreeNode("Examen");
+                ex.forEach(examen -> exa.add(new DefaultMutableTreeNode(examen)));
+                ((DefaultMutableTreeNode)root.getChildAt(i)).add(exa);
+            }
+            /*if (ex != null) {
                 DefaultMutableTreeNode exa = new DefaultMutableTreeNode("Examen");
                 exa.add(new DefaultMutableTreeNode(ex));
                 ((DefaultMutableTreeNode)root.getChildAt(i)).add(exa);
-            }
+            }*/
         }
         modelo.reload();
         jTree1.setModel(modelo);

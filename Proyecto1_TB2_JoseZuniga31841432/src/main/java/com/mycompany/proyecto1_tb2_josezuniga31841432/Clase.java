@@ -1,6 +1,6 @@
 package com.mycompany.proyecto1_tb2_josezuniga31841432;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
@@ -9,6 +9,7 @@ public class Clase {
     @BsonProperty(value = "id")
     private int idClase;
     private String nombreClase;
+    private ArrayList<Examen> examenes = new ArrayList<>();
 
     public Clase(int id, String nombreClase) {
         this.idClase = id;
@@ -40,6 +41,14 @@ public class Clase {
 
     public void setIdClase(int idClase) {
         this.idClase = idClase;
+    }
+
+    public ArrayList<Examen> getExamenes() {
+        return examenes;
+    }
+
+    public void setExamenes(ArrayList<Examen> examenes) {
+        this.examenes = examenes;
     }
     
     @Override

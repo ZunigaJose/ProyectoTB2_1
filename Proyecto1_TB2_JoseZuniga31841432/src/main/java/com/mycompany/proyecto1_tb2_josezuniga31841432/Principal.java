@@ -166,6 +166,10 @@ public class Principal extends javax.swing.JFrame {
         jrbTrue = new javax.swing.JRadioButton();
         jrbFalse = new javax.swing.JRadioButton();
         bgroupExamen = new javax.swing.ButtonGroup();
+        detalleNota = new javax.swing.JDialog();
+        jPanel11 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        detallNotaList = new javax.swing.JList<>();
         principalIngresar = new javax.swing.JButton();
         princilalRegistro = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -557,6 +561,11 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane4.setViewportView(jlistDisponibles);
 
         jlistTomados.setModel(new DefaultListModel());
+        jlistTomados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlistTomadosMouseClicked(evt);
+            }
+        });
         jScrollPane5.setViewportView(jlistTomados);
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -734,28 +743,33 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(examenNext))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelNPregunta))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addComponent(labelTitPregunta))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(239, 239, 239)
-                        .addComponent(jrbTrue)
-                        .addGap(82, 82, 82)
-                        .addComponent(jrbFalse)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addComponent(labelTitPregunta)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addGap(0, 91, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(132, 132, 132))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGap(315, 315, 315)
+                                .addComponent(examenNext))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(jrbTrue)
+                                .addGap(82, 82, 82)
+                                .addComponent(jrbFalse)))
+                        .addGap(57, 57, 57))))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -768,20 +782,17 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(labelTitPregunta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(11, 11, 11)
+                .addComponent(jLabel14)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(examenNext)
-                            .addComponent(jLabel14))
-                        .addContainerGap())
+                    .addComponent(examenNext)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jrbTrue)
                             .addComponent(jrbFalse))
-                        .addGap(116, 116, 116))))
+                        .addGap(2, 2, 2)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pantallaExamenLayout = new javax.swing.GroupLayout(pantallaExamen.getContentPane());
@@ -792,9 +803,40 @@ public class Principal extends javax.swing.JFrame {
         );
         pantallaExamenLayout.setVerticalGroup(
             pantallaExamenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pantallaExamenLayout.createSequentialGroup()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel11.setBackground(new java.awt.Color(109, 183, 212));
+
+        detallNotaList.setModel(new DefaultListModel());
+        jScrollPane6.setViewportView(detallNotaList);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout detalleNotaLayout = new javax.swing.GroupLayout(detalleNota.getContentPane());
+        detalleNota.getContentPane().setLayout(detalleNotaLayout);
+        detalleNotaLayout.setHorizontalGroup(
+            detalleNotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        detalleNotaLayout.setVerticalGroup(
+            detalleNotaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -939,6 +981,9 @@ public class Principal extends javax.swing.JFrame {
 
     private void añadirClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirClaseActionPerformed
         String nombre = nuevaClaseNombre.getText();
+        if (nombre.equals("")) {
+            return;
+        }
         int id;
         id = (int) clClase.countDocuments() + 1;
         Clase clase = new Clase(id, nombre);
@@ -1062,7 +1107,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void examenNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_examenNextActionPerformed
         if (bgroupExamen.getSelection() != null && !preguntas.isEmpty()) {
-            if (jrbTrue.isSelected() == preguntas.pop().isTipo()) {//Evalua que la respuesta sea correcta
+            Pregunta preguntaAct = preguntas.pop();
+            if (jrbTrue.isSelected() == preguntaAct.isTipo()) {//Evalua que la respuesta sea correcta
                 alumnoIngresado.getNotas().get(0).sumarNota(puntosPorpregunta);
             }
             if (preguntas.size() >= 1) {
@@ -1076,6 +1122,9 @@ public class Principal extends javax.swing.JFrame {
             if (preguntas.size() == 1) {
                 examenNext.setText("Enviar Examen");
             }
+            PreguntaResuelta pr = new PreguntaResuelta(
+                    preguntaAct.getIdPregunta(), jrbTrue.isSelected());
+            alumnoIngresado.getNotas().get(0).getPreguntas().add(pr);
         } 
         if (bgroupExamen.getSelection() != null) {
             try {
@@ -1159,6 +1208,15 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenu3MouseClicked
 
+    private void jlistTomadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistTomadosMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (jlistDisponibles.getSelectedValue() != null) {
+                mostrarDetalleNota(jlistTomados.getSelectedValue());
+                //Pantalla Resultado detalleNota()
+            }
+        }
+    }//GEN-LAST:event_jlistTomadosMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1205,6 +1263,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JRadioButton creaVerdadero;
     private javax.swing.JSpinner crearExamenSpinner;
     private javax.swing.JTextArea descripcionPregunta;
+    private javax.swing.JList<PreguntaResuelta> detallNotaList;
+    private javax.swing.JDialog detalleNota;
     private javax.swing.JButton examenNext;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -1238,6 +1298,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1251,6 +1312,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
     private javax.swing.JList<Examen> jlistDisponibles;
@@ -1351,6 +1413,15 @@ public class Principal extends javax.swing.JFrame {
         return map;
     }
     
+    Map<Integer, Pregunta> generateMapPreguntas(Nota nota) {
+        Map<Integer, Pregunta> map = new HashMap<>();
+        for (PreguntaResuelta pregunta : nota.getPreguntas()) {
+            Pregunta preguntaqu = clPregunta.find(eq("id",pregunta.getIdPregunta())).first();
+            map.put(pregunta.getIdPregunta(), preguntaqu);
+        }
+        return map;
+    }
+    
     void mostrarPantallaAlumno() {
         Map<Integer, String> map =  new HashMap<>();
         map = generateMap();
@@ -1384,6 +1455,7 @@ public class Principal extends javax.swing.JFrame {
         labelNPregunta.setText("1");
         examenNext.setText("Siguiente Pregunta");
         examenNext.setEnabled(false);
+        bgroupExamen.clearSelection();
         Pregunta pregunta = preguntas.peek();
         labelTitPregunta.setText(pregunta.getTitulo());
         labelPreguntaExamen.setText(pregunta.getDescripcion());
@@ -1392,6 +1464,19 @@ public class Principal extends javax.swing.JFrame {
         pantallaExamen.setLocationRelativeTo(this);
         pantallaExamen.setVisible(true);
     }
+    
+    void mostrarDetalleNota(Nota nota) {
+        Map<Integer, Pregunta> map =  new HashMap<>();
+        map = generateMapPreguntas(nota);
+        DefaultListModel<PreguntaResuelta> modelo = new DefaultListModel<>();
+        
+        modelo.addAll(nota.getPreguntas());
+        detallNotaList.setModel(modelo);
+        detalleNota.setLocationRelativeTo(pantallaAlumno);
+        detalleNota.pack();
+        detalleNota.setVisible(true);
+    }
+            
     
     void llenarArbolClases() {
         ArrayList<Clase> clases = clClase.find().into(new ArrayList<Clase>());

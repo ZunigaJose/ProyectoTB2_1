@@ -1,9 +1,11 @@
 package com.mycompany.proyecto1_tb2_josezuniga31841432;
 
+import java.util.ArrayList;
+
 public class Nota {
     private int idExamen;
     private double nota;
-
+    private ArrayList<PreguntaResuelta> preguntas = new ArrayList<>();
     public Nota() {
     }
 
@@ -32,5 +34,13 @@ public class Nota {
 
     public void setNota(double nota) {
         this.nota = nota;
+    }
+
+    public ArrayList<PreguntaResuelta> getPreguntas() {
+        return preguntas;
+    }
+
+    public void setPreguntas(ArrayList<PreguntaResuelta> preguntas) {
+        this.preguntas = preguntas;
     }
 }
